@@ -164,9 +164,31 @@ public with sharing class DMLOperations {
      * @param oppNames The list of Opportunity names.
      */
     public static void upsertOpportunities(String accountName, List<String> oppNames) {
+
+        Account accountToUpsert = new Account(Name = accountName);
+        upsert accountToUpsert;
+
+        List<Account> retrieveAccounts = [SELECT Id FROM Account WHERE Name = :accountName LIMIT 1];
+        Id accountId = retrieveAccounts[0].Id;
+
+        Set<String> existingOppNames = new Set<String>();
+        for (Opportunity opp : [SELECT Name FROM Opportunity WHERE AccountId = :accountId]){
+            existingOppNames.add(opp.Name);
+        }
+
+        List<Opportunity> opportunitiesToUpsert = new List<Opportunity>();
         // Loop through each Opportunity name
+        for(String oppName : oppNames){
+            if(!existingOppNames.contains(oppName)){
             // Create an Opportunity with the given name
+            Opportunity newOpp = new Opportunity(Name = oppName, AccountId = accountId, StageName = 'New', CloseDate = Date.today());
             // Add the Opportunity to the list
+            opportunitiesToUpsert.add(newOpp);
+            }
+        }
+        if (!opportunitiesToUpsert.isEmpty()) {
+            upsert opportunitiesToUpsert;
+        }
     }
     
     /**
