@@ -200,15 +200,17 @@ public with sharing class DMLOperations {
 	 * @return The Account that was upserted.
 	 */
 	public static Account upsertAccount(String accountName) {
+        Account accountToUpsert;
 		// Query for the Account
 		List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName];
-
-		// if the Account exists, update the description
-
-		// otherwise, create a new Account and set the description
-
-		// Upsert the Account
-		return null;
+            if(!accounts.isEmpty()) {
+            accountToUpsert = accounts[0];
+            accountToUpsert.Description = 'Updated Account';
+            } else {
+                accountToUpsert = new Account(Name = accountName, Description = 'New Account'); 
+            }
+            upsert accountToUpsert;
+		return accountToUpsert;
 	}
 
     /**
