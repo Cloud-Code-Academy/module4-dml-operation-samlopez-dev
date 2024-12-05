@@ -223,15 +223,19 @@ public with sharing class DMLOperations {
 	 * @param contactsToUpsert List of Contacts to be upserted and linked to accounts.
 	 */
 	public static void upsertAccountsWithContacts(List<Contact> contactsToUpsert) {
+        List<Contact> contactsToUpdateUpsert = new List<Contact>();
 		// Loop through each Contact
-
+        for(Contact currentContact : contactsToUpsert){
 		// Extract the Account Name from Contact's LastName
-
+            String accountName = currentContact.LastName;
 		// Get the account based on the name or create one if it doesn't exist
-
+            Account linkedAccount = upsertAccount(accountName);
 		// Link the Contact to its Account using the Account Id
-
+            currentContact.AccountId = linkedAccount.Id;
+            contactsToUpdateUpsert.add(currentContact);
+        }
 		// Upsert the Contacts
+        upsert contactsToUpdateUpsert;
 	}
 
     /**
