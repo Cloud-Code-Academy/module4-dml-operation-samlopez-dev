@@ -209,8 +209,8 @@ public with sharing class DMLOperations {
             } else {
                 accountToUpsert = new Account(Name = accountName, Description = 'New Account'); 
             }
-            upsert accountToUpsert;
-		return accountToUpsert;
+        upsert accountToUpsert;
+	return accountToUpsert;
 	}
 
     /**
