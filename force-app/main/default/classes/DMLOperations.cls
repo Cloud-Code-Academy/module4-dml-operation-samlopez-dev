@@ -73,7 +73,7 @@ public with sharing class DMLOperations {
         if (Schema.sObjectType.Contact.isCreateable()) {
             insert newContact;
         } else {
-            throw new AuthorizationException('You do not have permission to create Contact records.');
+            throw new DmlException('You do not have permission to create Contact records.');
         }
         // Return the Id of the newly created Contact
         return newContact.Id;
