@@ -200,7 +200,7 @@ public with sharing class DMLOperations {
 	 * @return The Account that was upserted.
 	 */
 	public static Account upsertAccount(String accountName) {
-        Account accountToUpsert;
+             Account accountToUpsert;
 		// Query for the Account
 		List<Account> accounts = [SELECT Id FROM Account WHERE Name = :accountName];
             if(!accounts.isEmpty()) {
